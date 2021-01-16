@@ -1,5 +1,5 @@
 from control import series, tf
-from tools import lead_lag, pade_model
+from .tools import lead_lag, pade_model
 
 
 class Pilot:
