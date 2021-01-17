@@ -26,7 +26,7 @@ def lead_lag(t_lead, t_lag):
 
 def pade_model(tau, n=1):
     approx = pade(tau, n)
-    approx = tf(approx[0, :], approx[1, :])
+    approx = tf(approx[0], approx[1])
     return approx
 
 
