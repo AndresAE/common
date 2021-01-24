@@ -109,7 +109,7 @@ def von_karman_q(v, b, h_w):
 
 
 def von_karman_r(v, b, h_v):
-    h_r = series(tf([1/v, 0], [3*b/(pi*v), 1]), h_v)
+    h_r = series(tf([-1/v, 0], [3*b/(pi*v), 1]), h_v)
     return h_r
 
 
