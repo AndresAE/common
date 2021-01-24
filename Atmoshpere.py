@@ -153,10 +153,10 @@ def von_karman_l_u(h):
     l_u_high = 2500
     if h < 1000:
         l_u = l_u_low
-    elif h < 2000:
-        l_u = l_u_high
-    else:
+    elif (h <= 2000) and (h >= 1000):
         l_u = interp(h, [1000, 2000], [l_u_low, l_u_high])
+    else:
+        l_u = l_u_high
 
     return l_u
 
@@ -166,10 +166,10 @@ def von_karman_l_v(h):
     l_v_high = 2500 / 2
     if h < 1000:
         l_v = l_v_low
-    elif h < 2000:
-        l_v = l_v_high
-    else:
+    elif (h <= 2000) and (h >= 1000):
         l_v = interp(h, [1000, 2000], [l_v_low, l_v_high])
+    else:
+        l_v = l_v_high
     return l_v
 
 
@@ -178,8 +178,8 @@ def von_karman_l_w(h):
     l_w_high = 2500 / 2
     if h < 1000:
         l_w = l_w_low
-    elif h < 2000:
-        l_w = l_w_high
-    else:
+    elif (h <= 2000) and (h >= 1000):
         l_w = interp(h, [1000, 2000], [l_w_low, l_w_high])
+    else:
+        l_w = l_w_high
     return l_w
