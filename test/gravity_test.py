@@ -29,6 +29,13 @@ out = list()
 out.append((is_close(h_0, 12.08413)))
 out.append(is_close(h_40k, 11.96425))
 
+h_0 = Gravity(0).gravity(planet='moon')
+h_40k = Gravity(40000).gravity(planet='moon')
+
+out = list()
+out.append((is_close(h_0, 35764733.3800)))
+out.append(is_close(h_40k, 97242.73604))
+
 h_0 = Gravity(0).gravity(planet='neptune')
 h_40k = Gravity(40000).gravity(planet='neptune')
 
@@ -42,6 +49,13 @@ h_40k = Gravity(40000).gravity(planet='saturn')
 out = list()
 out.append((is_close(h_0, 36.69637)))
 out.append(is_close(h_40k, 36.68101))
+
+h_0 = Gravity(0).gravity(planet='sun')
+h_40k = Gravity(40000).gravity(planet='sun')
+
+out = list()
+out.append((is_close(h_0, 6024975662.3099)))
+out.append(is_close(h_40k, 5513590160.94595))
 
 h_0 = Gravity(0).gravity(planet='uranus')
 h_40k = Gravity(40000).gravity(planet='uranus')

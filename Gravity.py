@@ -19,12 +19,18 @@ class Gravity:
         elif planet == 'mercury':
             r_0 = constants.radius_mercury()
             m = constants.mass_mercury()
+        elif planet == 'moon':
+            r_0 = constants.radius_moon()
+            m = constants.mass_moon()
         elif planet == 'neptune':
             r_0 = constants.radius_neptune()
             m = constants.mass_neptune()
         elif planet == 'saturn':
             r_0 = constants.radius_saturn()
             m = constants.mass_saturn()
+        elif planet == 'sun':
+            r_0 = constants.radius_sun()
+            m = constants.mass_sun()
         elif planet == 'uranus':
             r_0 = constants.radius_uranus()
             m = constants.mass_uranus()

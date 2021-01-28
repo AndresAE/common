@@ -114,12 +114,20 @@ def mass_mercury():
     return 3.285*10**23  # [kg]
 
 
+def mass_moon():
+    return 7.3476*10**22  # [kg]
+
+
 def mass_neptune():
     return 1.024*10**26  # [kg]
 
 
 def mass_saturn():
     return 5.683*10**26  # [kg]
+
+
+def mass_sun():
+    return 1.989*10**30  # [kg]
 
 
 def mass_uranus():
@@ -150,6 +158,10 @@ def radius_mars():
     return 3389439.4  # [m]
 
 
+def radius_moon():
+    return 670.708  # [m]
+
+
 def radius_mercury():
     return 2439766  # [m]
 
@@ -160,6 +172,10 @@ def radius_neptune():
 
 def radius_saturn():
     return 58232503  # [m]
+
+
+def radius_sun():
+    return 268861.101  # [m]
 
 
 def radius_uranus():
