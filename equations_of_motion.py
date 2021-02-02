@@ -1,5 +1,5 @@
 # File containing Equations of Motion
-from numpy import concatenate, cross, dot, linalg, transpose
+from numpy import concatenate, cross, linalg, transpose
 from .rotations import angular_rate_rotation, ned_to_body
 
 
@@ -33,11 +33,11 @@ def nonlinear_eom(x, m, j, c):
     kinematics = b_euler @ omega
 
     # angular momentum equations
-    angular_momentum = linalg.inv(j) @ transpose(external_moments - cross(omega, dot(j, omega)))
+    angular_momentum = linalg.inv(j) @ transpose(external_moments - cross(omega, (j @ omega)))
 
     # navigation equations
     b_body = ned_to_body(euler[0], euler[1], euler[2])
-    navigation = b_body.transpose() @ v
+    navigation = linalg.inv(b_body) @ v
     navigation[-1] = - navigation[-1]   # positive altitude
     dx_dt = concatenate((concatenate((concatenate((linear_momentum, kinematics)), angular_momentum)), navigation))
     return dx_dt

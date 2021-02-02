@@ -3,13 +3,13 @@ from numpy import arctan, deg2rad, random, rad2deg, sqrt, tan
 
 
 def angle_of_attack(x):
-    v = sqrt(x[0]**2+x[1]**2+x[2]**2)
-    aoa = rad2deg(arctan(x[2] / v))
+    aoa = rad2deg(arctan(x[2] / x[0]))
     return aoa
 
 
 def angle_of_sideslip(x):
-    aos = rad2deg(arctan(x[1] / x[0]))
+    v = sqrt(x[0] ** 2 + x[1] ** 2 + x[2] ** 2)
+    aos = rad2deg(arctan(x[1] / v))
     return aos
 
 
@@ -17,6 +17,13 @@ def dynamic_pressure(rho, x):
     v = speed(x)
     q = 0.5 * rho * v ** 2
     return q
+
+
+def flight_path_angle(x):
+    theta = rad2deg(x[4])
+    alpha = angle_of_attack(x)
+    gamma = theta - alpha
+    return gamma
 
 
 def lead_lag(t_lead, t_lag):
@@ -36,11 +43,11 @@ def speed(x):
 
 
 def uvw(v, alpha, beta):
-    w = v * tan(deg2rad(alpha))
-    v_u = tan(deg2rad(beta))
-    u = sqrt((v**2 - w**2) / (1 + v_u**2))
-    v = v_u * u
-    return [u, v, w]
+    vb = v * tan(deg2rad(beta))
+    w_u = tan(deg2rad(alpha))
+    ub = sqrt((v**2 - vb**2) / (1 + w_u**2))
+    wb = w_u * ub
+    return [ub, vb, wb]
 
 
 def unit_noise():
