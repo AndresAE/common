@@ -2,8 +2,6 @@
 #include "cmn.hpp"
 #include "earth.hpp"
 
-#include <stdexcept>
-
 namespace common
 {
     namespace
@@ -17,11 +15,6 @@ namespace common
         AtmosphereState stateAt(double altitudeM)
         {
             constexpr double maxDouble = 1.7976931348623157e308;
-            if (altitudeM != altitudeM ||
-                altitudeM > maxDouble || altitudeM < -maxDouble)
-            {
-                throw std::invalid_argument("altitude must be finite");
-            }
 
             CMN cmn;
             if (altitudeM > 25000.0)

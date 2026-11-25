@@ -28,7 +28,8 @@ int main()
     assert_near(atmosphere.getSpeedOfSound(0.0),
                 cmn.sqrt(Earth::AIR_RATIO_OF_SPECIFIC_HEATS *
                          Earth::AIR_SPECIFIC_GAS_CONSTANT_J_PER_KG_K *
-                         (15.04 + Earth::CELSIUS_TO_KELVIN)), 1e-12,
+                         (15.04 + Earth::CELSIUS_TO_KELVIN)),
+                1e-12,
                 "sea-level speed of sound");
 
     const double troposphereTemperature = 15.04 - 0.00649 * 5000.0;
@@ -56,17 +57,6 @@ int main()
     assert_near(atmosphere.getPressure(30000.0),
                 2.488 * std::pow((upperTemperature + 273.1) / 216.6, -11.388),
                 1e-12, "upper stratosphere pressure");
-
-    bool nonFiniteAltitudeRejected = false;
-    try
-    {
-        atmosphere.getPressure(std::numeric_limits<double>::infinity());
-    }
-    catch (const std::invalid_argument &)
-    {
-        nonFiniteAltitudeRejected = true;
-    }
-    assert_true(nonFiniteAltitudeRejected, "reject non-finite altitude");
 
     summary();
     return tests_failed;

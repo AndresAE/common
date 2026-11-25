@@ -15,7 +15,6 @@ namespace common
         static constexpr double AIR_RATIO_OF_SPECIFIC_HEATS = 1.4;
         static constexpr double AIR_SPECIFIC_GAS_CONSTANT_J_PER_KG_K = 287.05;
         static constexpr double CELSIUS_TO_KELVIN = 273.15;
-
         double accelerationDueToGravity(CMN::matrix ecef);
         double primeVerticalRadiusOfCurvature(double latG_d);
         CMN::matrix lla2ecef(CMN::matrix lla);
