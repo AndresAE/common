@@ -7,7 +7,8 @@ namespace common
     {
     public:
         // angle conversions
-        double _PI = 3.141592653589793;
+        static constexpr double _PI = 3.141592653589793;
+        static constexpr double CELSIUS_TO_KELVIN = 273.15;
         static double deg2rad(double deg);
         static double rad2deg(double rad);
         static double deg2sc(double deg);
@@ -46,6 +47,14 @@ namespace common
         static double sec2min(double sec);
         static double sec2ms(double sec);
         static double sec2mus(double sec);
+
+        // temperature
+        static double celsius2fahrenheit(double c);
+        static double fahrenheit2celsius(double f);
+
+        // density
+        static double kgm3_2_slugft3(double kgm3);
+        static double slugft3_2_kgm3(double slugft3);
     };
 
 } // namespace common

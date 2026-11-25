@@ -34,6 +34,18 @@ if errorlevel 1 exit /b 1
 g++ -std=c++17 ^
   -I ../include ^
   ../src/cmn.cpp ^
+  ../src/filter.cpp ^
+  test_filter.cpp ^
+  -o test_filter.exe
+if errorlevel 1 exit /b 1
+
+test_filter.exe
+if errorlevel 1 exit /b 1
+
+g++ -std=c++17 ^
+  -I ../include ^
+  ../src/cmn.cpp ^
+  ../src/conversions.cpp ^
   ../src/atmo.cpp ^
   test_atmo.cpp ^
   -o test_atmo.exe

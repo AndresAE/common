@@ -151,4 +151,24 @@ namespace common
         return sec * 1000000.0;
     }
 
+    double Conversions::celsius2fahrenheit(double c)
+    {
+        return (c * 9.0 / 5.0) + 32.0;
+    }
+
+    double Conversions::fahrenheit2celsius(double f)
+    {
+        return (f - 32.0) * 5.0 / 9.0;
+    }
+
+    double Conversions::kgm3_2_slugft3(double kgm3)
+    {
+        return kgm3 * 0.00194032033;
+    }
+
+    double Conversions::slugft3_2_kgm3(double slugft3)
+    {
+        return slugft3 * 515.378818;
+    }
+
 } // namespace common

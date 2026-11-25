@@ -26,18 +26,27 @@ void FILTER::init()
     double Da[5] = {0};
 
     double c[5][5] = {0};
-
-    for (int i = 0; i <= 4; ++i)
+    int degree = 0;
+    for (int i = 4; i >= 0; --i)
     {
-        for (int p = 0; p <= i; ++p)
+        if (num[i] != 0.0 || den[i] != 0.0)
         {
-            for (int q = 0; q <= 4 - i; ++q)
+            degree = i;
+            break;
+        }
+    }
+
+    for (int i = 0; i <= degree; ++i)
+    {
+        for (int r = 0; r <= i; ++r)
+        {
+            for (int s = 0; s <= degree - i; ++s)
             {
-                int j = p + q;
+                int j = degree - r - s;
                 double term =
-                    ((p % 2) ? -1.0 : 1.0) *
-                    binom(i, p) *
-                    binom(4 - i, q);
+                    (((i - r) % 2) ? -1.0 : 1.0) *
+                    binom(i, r) *
+                    binom(degree - i, s);
                 c[i][j] += term;
             }
         }
@@ -47,8 +56,8 @@ void FILTER::init()
     {
         for (int i = 0; i <= 4; ++i)
         {
-            Nb[j] += num[i] * pow(k, i) * c[i][j];
-            Da[j] += den[i] * pow(k, i) * c[i][j];
+            Nb[j] += num[i] * cmn.pwr(k, i) * c[i][j];
+            Da[j] += den[i] * cmn.pwr(k, i) * c[i][j];
         }
     }
 

@@ -1,61 +1,55 @@
 #include "atmo.hpp"
-#include "cmn.hpp"
-#include "earth.hpp"
 
 namespace common
 {
-    namespace
+    Atmosphere::atmoState Atmosphere::update(double altMsl_ft)
     {
-        struct AtmosphereState
+        altMsl_m = C.ft2m(altMsl_ft);
+
+        if (altMsl_m > 25000.0)
         {
-            double temperatureC;
-            double pressureKPa;
-        };
-
-        AtmosphereState stateAt(double altitudeM)
-        {
-            constexpr double maxDouble = 1.7976931348623157e308;
-
-            CMN cmn;
-            if (altitudeM > 25000.0)
-            {
-                const double temperatureC = -131.21 + 0.00299 * altitudeM;
-                const double temperatureRatio = (temperatureC + 273.1) / 216.6;
-                return {temperatureC, 2.488 * cmn.pwr(temperatureRatio, -11.388)};
-            }
-
-            if (altitudeM > 11000.0)
-            {
-                return {-56.46, 22.65 * cmn.exp(1.73 - 0.000157 * altitudeM)};
-            }
-
-            const double temperatureC = 15.04 - 0.00649 * altitudeM;
-            const double temperatureRatio = (temperatureC + 273.1) / 288.08;
-
-            return {temperatureC, 101.29 * cmn.pwr(temperatureRatio, 5.256)};
+            const double temperatureC = -131.21 + 0.00299 * altMsl_m;
+            const double temperatureRatio = (temperatureC + 273.1) / 216.6;
+            return {
+                C.celsius2fahrenheit(temperatureC),
+                C.pa2psf(1000.0 * 2.488 * cmn.pwr(temperatureRatio, -11.388))};
         }
+
+        if (altMsl_m > 11000.0)
+        {
+            return {
+                C.celsius2fahrenheit(-56.46),
+                C.pa2psf(1000.0 * 22.65 * cmn.exp(1.73 - 0.000157 * altMsl_m))};
+        }
+
+        const double temperatureC = 15.04 - 0.00649 * altMsl_m;
+        const double temperatureRatio = (temperatureC + 273.1) / 288.08;
+
+        return {
+            C.celsius2fahrenheit(temperatureC),
+            C.pa2psf(1000.0 * 101.29 * cmn.pwr(temperatureRatio, 5.256))};
     }
 
-    double Atmosphere::getTemperature(double altitudeM)
+    double Atmosphere::getTemperature(double altMsl_ft)
     {
-        return stateAt(altitudeM).temperatureC;
+        return update(altMsl_ft).temp_F;
     }
 
-    double Atmosphere::getPressure(double altitudeM)
+    double Atmosphere::getPressure(double altMsl_ft)
     {
-        return stateAt(altitudeM).pressureKPa;
+        return update(altMsl_ft).pres_PSF;
     }
 
-    double Atmosphere::getDensity(double altitudeM)
+    double Atmosphere::getDensity(double altMsl_ft)
     {
-        const AtmosphereState state = stateAt(altitudeM);
-        return state.pressureKPa / (0.2869 * (state.temperatureC + 273.1));
+        const atmoState state = update(altMsl_ft);
+        return C.kgm3_2_slugft3(C.psf2pa(state.pres_PSF) / (0.2869 * (C.fahrenheit2celsius(state.temp_F) + C.CELSIUS_TO_KELVIN)));
     }
 
-    double Atmosphere::getSpeedOfSound(double altitudeM)
+    double Atmosphere::getSpeedOfSound(double altMsl_ft)
     {
-        const AtmosphereState state = stateAt(altitudeM);
-        const double temperatureK = state.temperatureC + Earth::CELSIUS_TO_KELVIN;
+        const atmoState state = update(altMsl_ft);
+        const double temperatureK = C.fahrenheit2celsius(state.temp_F) + C.CELSIUS_TO_KELVIN;
         CMN cmn;
         return cmn.sqrt(Earth::AIR_RATIO_OF_SPECIFIC_HEATS *
                         Earth::AIR_SPECIFIC_GAS_CONSTANT_J_PER_KG_K * temperatureK);

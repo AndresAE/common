@@ -25,6 +25,6 @@ transform test programs. It stops and returns a failure code if a build or
 test fails. Generated executables are written into `test`.
 
 ## TODO
-- [ ] Add Filter test cases.
+- [x] Add Filter test cases.
 - [ ] Add temperature conversions to conversions code and replace one-offs in atmo code.
 - [ ] Add ficticious force calcs in earth code.

@@ -1,6 +1,7 @@
 #include "../include/atmo.hpp"
 #include "../include/cmn.hpp"
 #include "../include/earth.hpp"
+#include "../include/conversions.hpp"
 #include "minitest.hpp"
 
 using namespace common;
@@ -10,48 +11,68 @@ int main()
 {
     Atmosphere atmosphere;
     CMN cmn;
+    Conversions C;
 
-    const double seaLevelTemperature = 15.04;
+    const double seaLevelTemperatureC = 15.04;
     const double seaLevelPressure =
-        101.29 * cmn.pwr((seaLevelTemperature + 273.1) / 288.08, 5.256);
-    assert_near(atmosphere.getTemperature(0.0), 15.04, 1e-12,
+        C.pa2psf(1000.0 * 101.29 *
+                  cmn.pwr((seaLevelTemperatureC + 273.1) / 288.08, 5.256));
+    assert_near(atmosphere.getTemperature(0.0),
+                C.celsius2fahrenheit(seaLevelTemperatureC), 1e-12,
                 "sea-level temperature");
     assert_near(atmosphere.getPressure(0.0), seaLevelPressure, 1e-12,
                 "sea-level pressure");
     assert_near(atmosphere.getDensity(0.0),
-                seaLevelPressure / (0.2869 * (seaLevelTemperature + 273.1)), 1e-12,
+                C.kgm3_2_slugft3(
+                    C.psf2pa(seaLevelPressure) /
+                    (0.2869 * (seaLevelTemperatureC + C.CELSIUS_TO_KELVIN))),
+                1e-12,
                 "sea-level density");
     assert_near(atmosphere.getSpeedOfSound(0.0),
                 cmn.sqrt(Earth::AIR_RATIO_OF_SPECIFIC_HEATS *
                          Earth::AIR_SPECIFIC_GAS_CONSTANT_J_PER_KG_K *
-                         (15.04 + Earth::CELSIUS_TO_KELVIN)),
+                         (seaLevelTemperatureC + C.CELSIUS_TO_KELVIN)),
                 1e-12,
                 "sea-level speed of sound");
 
-    const double troposphereTemperature = 15.04 - 0.00649 * 5000.0;
+    const double troposphereAltitudeM = 5000.0;
+    const double troposphereAltitudeFt = C.m2ft(troposphereAltitudeM);
+    const double troposphereTemperatureC =
+        15.04 - 0.00649 * troposphereAltitudeM;
     const double tropospherePressure =
-        101.29 * cmn.pwr((troposphereTemperature + 273.1) / 288.08, 5.256);
-    assert_near(atmosphere.getTemperature(5000.0), troposphereTemperature, 1e-12,
+        C.pa2psf(1000.0 * 101.29 *
+                 cmn.pwr((troposphereTemperatureC + 273.1) / 288.08, 5.256));
+    assert_near(atmosphere.getTemperature(troposphereAltitudeFt),
+                C.celsius2fahrenheit(troposphereTemperatureC), 1e-12,
                 "troposphere temperature");
-    assert_near(atmosphere.getPressure(5000.0), tropospherePressure, 1e-12,
+    assert_near(atmosphere.getPressure(troposphereAltitudeFt),
+                tropospherePressure, 1e-12,
                 "troposphere pressure");
 
-    assert_near(atmosphere.getTemperature(11000.0),
-                15.04 - 0.00649 * 11000.0, 1e-12,
+    const double tropopauseM = 11000.0;
+    const double tropopauseFt = C.m2ft(tropopauseM);
+    assert_near(atmosphere.getTemperature(tropopauseFt),
+                C.celsius2fahrenheit(15.04 - 0.00649 * tropopauseM), 1e-12,
                 "temperature at tropopause");
-    assert_near(atmosphere.getTemperature(11001.0), -56.46, 1e-12,
+    assert_near(atmosphere.getTemperature(C.m2ft(11001.0)),
+                C.celsius2fahrenheit(-56.46), 1e-12,
                 "lower stratosphere temperature");
-    assert_near(atmosphere.getPressure(18000.0),
-                22.65 * cmn.exp(1.73 - 0.000157 * 18000.0), 1e-12,
+    assert_near(atmosphere.getPressure(C.m2ft(18000.0)),
+                C.pa2psf(1000.0 * 22.65 *
+                         cmn.exp(1.73 - 0.000157 * 18000.0)),
+                1e-12,
                 "lower stratosphere pressure");
 
-    assert_near(atmosphere.getTemperature(25000.0), -56.46, 1e-12,
+    assert_near(atmosphere.getTemperature(C.m2ft(25000.0)),
+                C.celsius2fahrenheit(-56.46), 1e-12,
                 "temperature at stratopause");
-    const double upperTemperature = -131.21 + 0.00299 * 30000.0;
-    assert_near(atmosphere.getTemperature(30000.0), upperTemperature, 1e-12,
+    const double upperTemperatureC = -131.21 + 0.00299 * 30000.0;
+    assert_near(atmosphere.getTemperature(C.m2ft(30000.0)),
+                C.celsius2fahrenheit(upperTemperatureC), 1e-12,
                 "upper stratosphere temperature");
-    assert_near(atmosphere.getPressure(30000.0),
-                2.488 * cmn.pwr((upperTemperature + 273.1) / 216.6, -11.388),
+    assert_near(atmosphere.getPressure(C.m2ft(30000.0)),
+                C.pa2psf(1000.0 * 2.488 *
+                         cmn.pwr((upperTemperatureC + 273.1) / 216.6, -11.388)),
                 1e-12, "upper stratosphere pressure");
 
     summary();
