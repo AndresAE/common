@@ -1,7 +1,5 @@
 #include "earth.hpp"
 
-#include <stdexcept>
-
 namespace common
 {
     namespace
@@ -10,13 +8,6 @@ namespace common
         constexpr double degToRad = pi / 180.0;
         constexpr double radToDeg = 180.0 / pi;
 
-        void requireVector3(const CMN::matrix &value)
-        {
-            if (value.rows != 3 || value.cols != 1)
-            {
-                throw std::invalid_argument("Earth conversions require a 3x1 matrix");
-            }
-        }
     }
 
     double Earth::primeVerticalRadiusOfCurvature(double latG_d)
@@ -29,7 +20,6 @@ namespace common
     CMN::matrix Earth::lla2ecef(CMN::matrix lla)
     {
         CMN cmn;
-        requireVector3(lla);
         const double latitude = lla.m[0][0] * degToRad;
         const double longitude = lla.m[1][0] * degToRad;
         const double altitude = lla.m[2][0];
@@ -51,15 +41,10 @@ namespace common
     CMN::matrix Earth::ecef2lla(CMN::matrix ecef)
     {
         CMN cmn;
-        requireVector3(ecef);
         const double x = ecef.m[0][0];
         const double y = ecef.m[1][0];
         const double z = ecef.m[2][0];
         const double p = cmn.hypot(x, y);
-        if (p == 0.0 && z == 0.0)
-        {
-            throw std::invalid_argument("ECEF origin has no defined geodetic coordinates");
-        }
 
         const double semiMinorAxis = WGS84_r_ft * cmn.sqrt(1.0 - WGS84_e2);
         const double secondEccentricitySquared =

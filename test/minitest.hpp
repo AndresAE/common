@@ -1,6 +1,5 @@
 #pragma once
 #include <iostream>
-#include <cmath>
 
 namespace minitest
 {
@@ -11,7 +10,8 @@ namespace minitest
     inline void assert_near(double a, double b, double eps, const char *msg)
     {
         tests_run++;
-        if (std::fabs(a - b) > eps)
+        const double difference = a - b;
+        if ((difference < 0.0 ? -difference : difference) > eps)
         {
             tests_failed++;
             std::cerr << "[FAIL] " << msg << " | expected " << b << " got " << a << "\n";

@@ -1,8 +1,6 @@
 #include "../include/earth.hpp"
 #include "minitest.hpp"
 
-#include <stdexcept>
-
 using namespace common;
 using namespace minitest;
 
@@ -57,28 +55,6 @@ int main()
                 "round-trip longitude");
     assert_near(roundTrip.m[2][0], original.m[2][0], 1e-6,
                 "round-trip altitude");
-
-    bool invalidShapeRejected = false;
-    try
-    {
-        earth.lla2ecef(CMN::matrix{});
-    }
-    catch (const std::invalid_argument &)
-    {
-        invalidShapeRejected = true;
-    }
-    assert_true(invalidShapeRejected, "reject non-3x1 input");
-
-    bool originRejected = false;
-    try
-    {
-        earth.ecef2lla(vector3(0.0, 0.0, 0.0));
-    }
-    catch (const std::invalid_argument &)
-    {
-        originRejected = true;
-    }
-    assert_true(originRejected, "reject ECEF origin");
 
     summary();
     return tests_failed;
