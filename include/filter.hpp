@@ -1,7 +1,7 @@
 #ifndef FILTER_HPP
 #define FILTER_HPP
 
-#include "..\util\cmn.hpp"
+#include "cmn.hpp"
 
 class FILTER
 {
